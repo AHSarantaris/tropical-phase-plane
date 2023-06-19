@@ -10,7 +10,7 @@ end
 nF = size(F,1);
 nG = size(G,1);
 nT = nF + nG;
-TL = TropicalCurves(F,G);
+TL = TropicalCurveData(F,G);
 if isempty(TL)
     return
 end
@@ -155,7 +155,7 @@ for i = 1:nT
         continue
     end
     V = vertices(:, vertexMap(i, 1:numVertices(i)));
-    uniqueVertices = UniquePoints(V,tol);
+    uniqueVertices = uniquePoints(V,tol);
     nUV = size(uniqueVertices,2);
     if nUV < 3
         linePointMap(i,:,:) = 0*linePointMap(i,:,:);
@@ -228,8 +228,8 @@ TropicalCurvePlot2(F,G,ulim,vlim,'LineWidth',2)
 TropicalCurvePlot2(G,[],ulim,vlim,'Color','r','LineWidth',1)
 TropicalCurvePlot2(F,[],ulim,vlim,'Color',[0.1 0.4 1],'LineWidth',1)
 
-TLF = TropicalCurves(F,[]);
-TLG = TropicalCurves(G,[]);
+TLF = TropicalCurveData(F,[]);
+TLG = TropicalCurveData(G,[]);
 for j = 1:2
     if j == 1
         TL2 = TLF;

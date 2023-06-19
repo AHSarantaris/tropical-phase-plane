@@ -1,7 +1,7 @@
 %% Parameters
 clear
 close all
-N = 6; % Degree of the system. N >= 4
+N = 5; % Degree of the system. N >= 4
 l1 = 2; % Length of manifold with slope 1
 l2 = 4; % Length of manifold with slope 1/2
 l3 = 6; % Length of manifold with slope 0
@@ -86,7 +86,10 @@ for k = 4:nG
     B(nk+1, mk+1) = bk;
     V(nk+1, mk+1) = -((n1-n2)*uk+b1-b2)/(m1-m2);
 end
-F = TranslateTropicalPolynomial(-(l3-l1)/2, l1/2, G);
+du = -(l3-l1)/2;
+dv = l1/2;
+F = G;
+F(:,2) = G(:,2) - du*G(:,3) - dv*G(:,4) - max(- du*G(:,3) - dv*G(:,4)) - 1;
 F(:,1) = -F(:,1);
 
 %% Draw Tropical Phase Portrait

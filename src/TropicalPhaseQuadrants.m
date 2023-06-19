@@ -12,7 +12,7 @@ ulims = zeros(4,2);
 vlims = zeros(4,2);
 if ~exist('ulim','var') || ~exist('vlim','var')
     for i = 1:4
-        TL = TropicalCurves(F{i},G{i});
+        TL = TropicalCurveData(F{i},G{i});
         Q = [TL.points,TL.tropicalPoints];
         nQ = size(Q,2);
         if nQ > 1

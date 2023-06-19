@@ -6,7 +6,7 @@ if isempty(G)
     G = zeros(0,4);
 end
 nG = size(G,1);
-TL = TropicalCurves(F,G);
+TL = TropicalCurveData(F,G);
 if isempty(TL)
     return
 end
@@ -138,7 +138,7 @@ end
 %%% Plot dominating areas
 for i = 1:nT
     V = vertices(:, vertexMap(i, 1:numVertices(i)));
-    uniqueVertices = UniquePoints(V,tol);
+    uniqueVertices = uniquePoints(V,tol);
     nUV = size(uniqueVertices,2);
     if nUV < 3
         linePointMap(i,:,:) = 0*linePointMap(i,:,:);

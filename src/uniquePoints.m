@@ -1,4 +1,4 @@
-function U = UniquePoints(P,tol)
+function U = uniquePoints(P,tol)
     U = zeros(size(P));
     nP = size(P,2);
     nU = 0;

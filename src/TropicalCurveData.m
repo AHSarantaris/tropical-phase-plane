@@ -1,4 +1,4 @@
-function TL = TropicalCurves(F,G)
+function TL = TropicalCurveData(F,G)
 
 nF = size(F,1);
 if isempty(G)
