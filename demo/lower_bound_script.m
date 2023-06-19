@@ -1,10 +1,10 @@
 %% Parameters
 clear
-N = 5; % Degree of the system. N >= 4
+close all
+N = 6; % Degree of the system. N >= 4
 l1 = 2; % Length of manifold with slope 1
 l2 = 4; % Length of manifold with slope 1/2
 l3 = 6; % Length of manifold with slope 0
-eps = 0.6; % epsilon
 
 %% Determine Tropical Polynomials
 M = [1 0; 1 1; 0 2];
@@ -82,13 +82,9 @@ for k = 4:nG
     b1 = B(n1+1, m1+1);
     b2 = B(n2+1, m2+1);
     bk = -((m1-m2)*nk*uk + (m2-mk)*(n1*uk+b1) + (mk-m1)*(n2*uk+b2))/(m1-m2);
-%     if bk > 0
-%         bk = -bk;
-%     end
     G(k,2) = bk;
     B(nk+1, mk+1) = bk;
     V(nk+1, mk+1) = -((n1-n2)*uk+b1-b2)/(m1-m2);
-%     fprintf('%i %i %i %.1f\n',[nk mk uk vk])
 end
 F = TranslateTropicalPolynomial(-(l3-l1)/2, l1/2, G);
 F(:,1) = -F(:,1);
@@ -101,50 +97,3 @@ close all
 figure
 % figure('Visible','on','Units','normalized','OuterPosition',[0 0.1 0.7 0.7])
 h = TropicalPhasePlane(F,G,ulim,vlim);
-
-%% Draw Trajectories
-if mod(N,2) == 0
-    nS = 1/4*(N^2 - 4*N + 4);
-    nU = 1/4*(N^2 - 6*N + 8);
-else
-    nS = 1/4*(N^2 - 4*N + 3);
-    nU = 1/4*(N^2 - 6*N + 9);
-end
-wS = zeros(nS,2);
-wU = zeros(nU,2);
-nW = 0;
-for n = 2:N-2
-    for m = 2:2:N-2
-        if n+m>N
-            break
-        else
-            nW = nW + 1;
-            wS(nW,:) = [U(n,m) V(n,m)];
-        end
-    end
-end
-nW = 0;
-for n = 2:N-2
-    for m = 3:2:N-2
-        if n+m>N
-            break
-        else
-            nW = nW + 1;
-            wU(nW,:) = [U(n,m) V(n,m)];
-        end
-    end
-end
-W0 = l1*[1 -0.5] + wS;
-for k = 1:size(W0,1)
-    EpsilonPhasePlot(F,G,W0(k,:),eps)
-end
-set(h,'TickDir','out');
-
-Fr = F;
-Gr = G;
-Fr(:,1) = -F(:,1);
-Gr(:,1) = -G(:,1);
-W0 = l1*[1 -0.5] + wU;
-for k = 1:size(W0,1)
-    EpsilonPhasePlot(Fr,Gr,W0(k,:),eps,[0 1e10],2,[0.6 0 0.6])
-end

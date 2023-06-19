@@ -32,19 +32,15 @@ hold(ax,'on')
 ax.Units = 'pixels';
 axsize = ax.Position(3:4);
 ax.Units = 'normalized';
-axmean = mean(axsize);
 ax.TickDir = 'both';
+fontsize(gcf,9,'points');
 
 %%% Plot styling
 colors = [0.6 0.7 1; 0.8 0.9 1; 1 0.5 0.5; 1 0.75 0.6];
 lineColor = 0*ones(1,3);
-lineWidth = 0.006*axmean;
-% lineWidth = 0.007*axmean;
-nullclineWidth = 1/2*lineWidth;
-markerSize = 4*min(1, lineWidth);
+markerSize = 4;
 tol = 1e-6;
-% fontsize = 0.02*axmean;
-fontsize = 8;
+fontSize = 8;
 
 %%% Plot handles
 nA = 0;
@@ -203,15 +199,15 @@ for i = 1:nT
         hp = plot(polygons{i},'FaceColor',c,'EdgeColor','none','FaceAlpha',1);
         [Cu,Cv] = centroid(polygons{i});
         nA = nA + 1;
-        arrowPlots{nA} = FilledArrow([Cu;Cv],flowVector,ulim,vlim,'k',true);
+        arrowPlots{nA} = FilledArrow2([Cu;Cv],flowVector,ulim,vlim,'k',1.3,true,true);
         s = sign(dT(:,i));
         ds1 = 15;
         ds2 = 10;
         du = (-abs(s(2))*ds1 + s(1)*ds2) / axsize(1)*diff(ulim);
         dv = (abs(s(1))*ds1 + s(2)*ds2) / axsize(2)*diff(vlim);
         hc = plot(Cu-du,Cv-dv,'o','MarkerEdgeColor',0.2*ones(1,3),'MarkerFaceColor',0.98*ones(1,3),...
-            'Visible',showLabels,'MarkerSize',fontsize+2);
-        ht = text(Cu-du,Cv-dv+0.002*diff(vlim), "" +i, 'Visible',showLabels,'FontSize',fontsize,'FontWeight','bold',...
+            'Visible',showLabels,'MarkerSize',fontSize+2,'LineWidth',1);
+        ht = text(Cu-du,Cv-dv, "" +i, 'Visible',showLabels,'FontSize',fontSize,'FontWeight','bold',...
             'HorizontalAlignment','center');
         hp.ButtonDownFcn = @(~,~) toggleVisibility(hc,ht) ;
         labelHandles(:,i) = {hc,ht};
@@ -228,21 +224,17 @@ end
 
 
 %%% Plot nullclines
-% TropicalCurvePlot([F;G],ulim,vlim,'LineWidth',lineWidth)
-% TropicalCurvePlot(F,ulim,vlim,'LineStyle','--','Color',[0.2 0.5 1],'LineWidth',nullclineWidth)
-% TropicalCurvePlot(G,ulim,vlim,'LineStyle','--','Color','r','LineWidth',nullclineWidth)
-TropicalCurvePlot2(F,G,ulim,vlim,'LineWidth',2.5)
-blue = [0.2 0.5 1];
-blue = [.1 .3 .9];
-blue = [0.2 0.4 1];
-TropicalCurvePlot2(F,[],ulim,vlim,'Color',blue,'LineWidth',1)
+TropicalCurvePlot2(F,G,ulim,vlim,'LineWidth',2)
 TropicalCurvePlot2(G,[],ulim,vlim,'Color','r','LineWidth',1)
+TropicalCurvePlot2(F,[],ulim,vlim,'Color',[0.1 0.4 1],'LineWidth',1)
 
+TLF = TropicalCurves(F,[]);
+TLG = TropicalCurves(G,[]);
 for j = 1:2
     if j == 1
-        TL2 = TropicalCurves(F,[]);
+        TL2 = TLF;
     else
-        TL2 = TropicalCurves(G,[]);
+        TL2 = TLG;
     end
     for i = 1:size(TL2.points,2)
         plot(TL2.points(1,i),TL2.points(2,i),'ko','MarkerFaceColor','k','MarkerSize',markerSize);
@@ -279,7 +271,7 @@ for i = 1:nT-1
                 end
                 nA = nA + 1;
 %                 arrowPlots{nA} = FilledArrow2(qmid,dV,ulim,vlim,'k',0.8*lineWidth,false,true);
-                arrowPlots{nA} = FilledArrow2(qmid,dV,ulim,vlim,'k',2,false,true);
+                arrowPlots{nA} = FilledArrow2(qmid,dV,ulim,vlim,'k',1.5,false,true);
             end
 %             lineStyle = '-';
 %             line(Q(1,:),Q(2,:),'LineStyle',lineStyle,'Color',lineColor,'LineWidth',lineWidth);
@@ -367,6 +359,31 @@ for i = 1:nT
         uistack(labelHandles{2,i},'top')
     end
 end
+
+ticks = zeros(2,2+size(TL.points,2)+size(TL.tropicalPoints,2)+size(TLF.points,2)+size(TLG.points,2));
+iticks = 0;
+for i = 1:size(TL.points,2)
+    iticks = iticks + 1;
+    ticks(:,iticks) = TL.points(:,i);
+end
+for i = 1:size(TL.tropicalPoints,2)
+    iticks = iticks + 1;
+    ticks(:,iticks) = TL.tropicalPoints(:,i);
+end
+for i = 1:size(TLF.points,2)
+    iticks = iticks + 1;
+    ticks(:,iticks) = TLF.points(:,i);
+end
+for i = 1:size(TLG.points,2)
+    iticks = iticks + 1;
+    ticks(:,iticks) = TLG.points(:,i);
+end
+ticks(:,[end-1 end]) = [ulim;vlim];
+ticks = round(ticks*100)/100;
+xticks(unique(ticks(1,:)))
+yticks(unique(ticks(2,:)))
+
+
 %%% Terminate
 xlim(ulim)
 ylim(vlim)
