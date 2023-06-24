@@ -1,4 +1,4 @@
-function varargout = FilledArrow2(p,d,ulim,vlim,c,lineWidth,hasTail,isDoubleHeaded)
+function varargout = LineArrow(p,d,ulim,vlim,c,lineWidth,hasTail,isDoubleHeaded)
 ax = gca;
 ax.Units = "pixels";
 pos = ax.Position;

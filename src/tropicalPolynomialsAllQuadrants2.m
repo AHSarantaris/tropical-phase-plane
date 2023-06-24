@@ -1,4 +1,4 @@
-function [F,G] = TropicalQuadrants2(F1,G1)
+function [F,G] = tropicalPolynomialsAllQuadrants2(F1,G1)
 F = {F1 F1 F1 F1};
 G = {G1 G1 G1 G1};
 

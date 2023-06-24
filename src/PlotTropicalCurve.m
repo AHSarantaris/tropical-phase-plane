@@ -1,14 +1,6 @@
-function h = TropicalCurvePlot(F,ulim, vlim, varargin)
+function h = PlotTropicalCurve(TDS, ulim, vlim, varargin)
 
-%%% Initialize variables
-nF = size(F,1);
-TDS = TropicalDynamicalSystem(F,zeros(0,4));
-if isempty(TDS)
-    return
-end
-T = F(:,2:4);
-nP = size(TDS.points,2);
-
+nI = TDS.nI;
 
 %%% Initialize axes
 ax = gca;
@@ -19,11 +11,9 @@ ax.Units = 'normalized';
 axmean = mean(axsize);
 
 %%% Plot styling
-lineColor = 0*ones(1,3);
-lineWidth = 0.006*axmean;
-markerSize = 3*min(1, lineWidth);
 tol = 1e-6;
-
+lineColor = 'k';
+lineWidth = 0.006*axmean;
 
 %%% Create default limits
 if ~exist('ulim','var') || isempty(ulim) || ~exist('vlim','var')  || isempty(vlim)
@@ -37,14 +27,6 @@ if ~exist('ulim','var') || isempty(ulim) || ~exist('vlim','var')  || isempty(vli
         rangeV = diff(qlim(2,:));
         rangeU = max(rangeU,rangeV);
         rangeV = rangeU;
-        if rangeU < tol && rangeV < tol
-            rangeU = 1;
-            rangeV = 1;
-%         elseif rangeU < tol
-%             rangeU = rangeV;
-%         elseif rangeV < tol
-%             rangeV = rangeU;
-        end
     elseif nQ == 1
         midU = Q(1,1);
         midV = Q(2,1);
@@ -60,16 +42,16 @@ end
 %%% Polygon variables
 corners = [ulim, ulim([2,1]); vlim, vlim];
 vertices = corners;
-vertexMap = zeros(nF,1);
+vertexMap = zeros(nI,1);
 nVertices = 4;
-numVertices = zeros(1,nF);
-linePoints = zeros(2,2*nP);
-linePointMap = zeros(nF,nF,2);
+numVertices = zeros(1,nI);
+linePoints = zeros(2,2*size(TDS.points,2));
+linePointMap = zeros(nI,nI,2);
 nLP = 0;
 
-%%% Find vertices
-for i = 1:nF-1
-    for j = i+1:nF
+%%% Determine polygon vertices for each region
+for i = 1:nI-1
+    for j = i+1:nI
         if TDS.numEndpoints(i,j) == 2
             P = TDS.points(:, TDS.pointMap(i,j,1:2));
             if all(abs(diff(P,1,2)) < tol)
@@ -79,15 +61,6 @@ for i = 1:nF-1
             if isempty(Q)
                 continue
             end
-            nLP = nLP + 2;
-            linePoints(:,[nLP-1,nLP]) = Q;
-            linePointMap(i,j,:) = [nLP-1,nLP];
-            nVertices = nVertices + 2;
-            vertices(:,[nVertices-1,nVertices]) = Q;
-            numVertices(i) = numVertices(i) + 2;
-            numVertices(j) = numVertices(j) + 2;
-            vertexMap(i, [numVertices(i)-1,numVertices(i)]) = [nVertices-1,nVertices];
-            vertexMap(j, [numVertices(j)-1,numVertices(j)]) = [nVertices-1,nVertices];
         elseif TDS.numEndpoints(i,j) == 1
             p1 = TDS.points(:, TDS.pointMap(i,j,1));
             p2 = boundaryPoint(p1, TDS.manifoldDirection(:,TDS.manifoldMap(i,j)), ulim, vlim);
@@ -95,28 +68,45 @@ for i = 1:nF-1
             if isempty(Q)
                 continue
             end
-            T2 = T(j,:)*[1;Q(:,2)];
-            Tmax = max(T*[1;Q(:,2)]);
-            if T2 + tol >= Tmax
-                nLP = nLP + 2;
-                linePoints(:,[nLP-1,nLP]) = Q;
-                linePointMap(i,j,:) = [nLP-1,nLP];
-                nVertices = nVertices + 2;
-                vertices(:,[nVertices-1 nVertices]) = Q;
-                numVertices(i) = numVertices(i) + 2;
-                numVertices(j) = numVertices(j) + 2;
-                vertexMap(i, [numVertices(i)-1 numVertices(i)]) = [nVertices-1 nVertices];
-                vertexMap(j, [numVertices(j)-1 numVertices(j)]) = [nVertices-1 nVertices];
+            z = TDS.alpha + TDS.deg*Q(:,2);
+            if z(j) + tol < max(z)
+                continue
             end
+        elseif TDS.manifoldMap(i,j) ~= 0
+            manifoldDirection = TDS.manifoldDirection(:,TDS.manifoldMap(i,j));
+            if manifoldDirection(1) == 0
+                vmid = mean(vlim);
+                umid = (TDS.alpha(j)-TDS.alpha(i))/(TDS.deg(i,1)-TDS.deg(j,1));
+            else
+                umid = mean(ulim);
+                vmid = ((TDS.deg(j,1)-TDS.deg(i,1))*umid + TDS.alpha(j)-TDS.alpha(i))/(TDS.deg(i,2)-TDS.deg(j,2));
+            end
+            pmid = [umid; vmid];
+            p1 = boundaryPoint(pmid, manifoldDirection, ulim, vlim);
+            p2 = boundaryPoint(pmid, -manifoldDirection, ulim, vlim);
+            Q = pointsInside([p1 p2],ulim,vlim);
+            if isempty(Q)
+                continue
+            end
+        else
+            continue
         end
+        nLP = nLP + 2;
+        linePoints(:,[nLP-1,nLP]) = Q;
+        linePointMap(i,j,:) = [nLP-1,nLP];
+        nVertices = nVertices + 2;
+        vertices(:,[nVertices-1 nVertices]) = Q;
+        numVertices(i) = numVertices(i) + 2;
+        numVertices(j) = numVertices(j) + 2;
+        vertexMap(i, [numVertices(i)-1 numVertices(i)]) = [nVertices-1 nVertices];
+        vertexMap(j, [numVertices(j)-1 numVertices(j)]) = [nVertices-1 nVertices];
     end
 end
 
 %%% Add corners as vertices
 for ic = 1:4
-    Tc = T*[1;corners(:,ic)];
-    Tmax = max(Tc);
-    [jmax,~] = find(abs(Tc-Tmax) < tol);
+    zc = TDS.alpha + TDS.deg*corners(:,ic);
+    [jmax,~] = find(abs(zc-max(zc)) < tol);
     for j = jmax'
         numVertices(j) = numVertices(j) + 1;
         vertexMap(j, numVertices(j)) = ic;
@@ -124,7 +114,7 @@ for ic = 1:4
 end
 
 %%% Plot dominating areas
-for i = 1:nF
+for i = 1:nI
     V = vertices(:, vertexMap(i, 1:numVertices(i)));
     uniqueVertices = uniquePoints(V,tol);
     nUV = size(uniqueVertices,2);
@@ -135,14 +125,24 @@ for i = 1:nF
 end
 
 %%% Plot lines
-for i = 1:nF-1
-    for j = i+1:nF
+for i = 1:nI-1
+    for j = i+1:nI
         lc = TDS.manifoldType(i,j);
         if ~all(linePointMap(i,j,:))
             continue
         end
-        if lc == TDS.CROSSING
-            lineStyle = '--';
+        if TDS.nV == 0
+            if TDS.delta(i)*TDS.delta(j) < 0
+                lineStyle = '-';
+            else
+                lineStyle = '--';
+            end
+        elseif lc == TDS.CROSSING
+            if dot(TDS.flowVectors(:,i),TDS.flowVectors(:,j)) ~= 0
+                continue
+            else
+                lineStyle = '--';
+            end
         else
             lineStyle = '-';
         end
@@ -150,16 +150,10 @@ for i = 1:nF-1
         line(Q(1,:),Q(2,:),'Color',lineColor,'LineWidth',lineWidth,'LineStyle',lineStyle,varargin{:})
     end
 end
-for i = 1:nP
-    plot(TDS.points(1,i),TDS.points(2,i),'o','Color',lineColor,'MarkerFaceColor',lineColor,'MarkerSize',markerSize);
-end
-
-
 
 %%% Terminate
 xlim(ulim)
 ylim(vlim)
-% hold(ax,'off')
 if nargout
     h = ax;
 end

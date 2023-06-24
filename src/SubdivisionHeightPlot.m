@@ -68,9 +68,9 @@ function SubdivisionHeightPlot(P,dP,showLabels)
     %%% Plot settings
     hold on
     view(2)
-    D = max(P) - min(P);
+%     D = max(P) - min(P);
 %     pbaspect([D(1) D(2) min(D(1:2))])
-    pbaspect([D(1) D(2) max(D(3),1)])
+%     pbaspect([D(1) D(2) max(D(3),1)])
     nlim = [min(P(:,1)) max(P(:,1))];
     mlim = [min(P(:,2)) max(P(:,2))];
     xlim(nlim + [-1 1])
@@ -119,13 +119,13 @@ function SubdivisionHeightPlot(P,dP,showLabels)
             dD(nD,:) = dP(i,:);
             dS(nD,:) = [0 0];
         end
-        if showLabels
-            FilledArrow3([P(i,1); P(i,2); (P(imax,3)+max(P(:,3)))/2 + 0.01],dD(nD,:)',dS(nD,:)',xlim,ylim,'k')
-        end
+%         if showLabels
+%             FilledArrow3([P(i,1); P(i,2); max(P(:,3)) + 0.01],dD(nD,:)',dS(nD,:)',xlim,ylim,'k')
+%         end
     end
     if showLabels
         for i = 1:length(ku)
-            FilledArrow3([P(ku(i),1); P(ku(i),2); (P(ku(i),3)+max(P(ku,3)))/2 + tol],dD(ku(i),:)',dS(ku(i),:)',xlim,ylim,'k')
+            FilledArrow3([P(ku(i),1); P(ku(i),2); max(P(ku,3)) + tol],dD(ku(i),:)',dS(ku(i),:)',xlim,ylim,'k')
         end
     end
     hold off

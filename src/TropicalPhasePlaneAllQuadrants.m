@@ -1,4 +1,4 @@
-function [hT,axs] = TropicalPhaseQuadrants(F1,G1,ulim,vlim)
+function [hT,axs] = TropicalPhasePlaneAllQuadrants(F1,G1,ulim,vlim)
 f = gcf;
 % f.Units = 'normalized';
 w = 0.5;
@@ -6,14 +6,14 @@ h = 0.8;
 % f.OuterPosition = [(1-w)/2 (1-h)/2 w h];´
 f.Units = 'pixels';
 
-[F,G] = TropicalQuadrants(F1,G1);
+[F,G] = tropicalPolynomialsAllQuadrants(F1,G1);
 
 ulims = zeros(4,2);
 vlims = zeros(4,2);
 if ~exist('ulim','var') || ~exist('vlim','var')
     for i = 1:4
-        TL = TropicalCurveData(F{i},G{i});
-        Q = [TL.points,TL.tropicalPoints];
+        TDS = TropicalDynamicalSystem(F{i},G{i});
+        Q = [TDS.points,TDS.nullclinePoints];
         nQ = size(Q,2);
         if nQ > 1
             qlim = [min(Q,[],2), max(Q,[],2)];

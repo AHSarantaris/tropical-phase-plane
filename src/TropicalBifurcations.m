@@ -18,7 +18,7 @@ for i = 1:na
 %     title(ax,"{\boldmath$" + symbol +" = " + str + "$}",'Interpreter',"latex")
     title(ax,"$" + symbol +" = " + str + "$",'Interpreter',"latex")
     if nargin > 7
-        EpsilonPhasePlot(F(ai),G(ai),varargin{:})
+        SimulatedTrajectory(F(ai),G(ai),varargin{:})
     end
 end
 if nargout

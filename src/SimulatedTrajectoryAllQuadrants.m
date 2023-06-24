@@ -1,4 +1,4 @@
-function EpsilonPhaseQuadrants(n,iq0,axs,F1,G1,w0,epsilon,tspan,maxseconds)
+function SimulatedTrajectoryAllQuadrants(n,iq0,axs,F1,G1,w0,epsilon,tspan,maxseconds)
 
 if ~exist('epsilon','var')
     epsilon = 0.2;
@@ -11,7 +11,7 @@ if ~exist('maxseconds','var')
 end
 
 
-[F,G] = TropicalQuadrants(F1,G1);
+[F,G] = tropicalPolynomialsAllQuadrants(F1,G1);
 
 
 iq = iq0;
@@ -21,7 +21,7 @@ iw = 0;
 for i = 1:n
     ax = axs{iq0};
     axes(ax)
-    [~,w1] = EpsilonPhasePlot(F{iq0},G{iq0},w1,epsilon,tspan,maxseconds);
+    [~,w1] = SimulatedTrajectory(F{iq0},G{iq0},w1,epsilon,tspan,maxseconds);
     iq1 = nextQuadrant(iq0,w1,ax.XLim,ax.YLim);
     if iq1 == 0 || norm(w1 - w0) < 1e-6
         break

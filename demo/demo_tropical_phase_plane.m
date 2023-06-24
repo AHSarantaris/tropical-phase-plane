@@ -11,10 +11,10 @@ F = [1 a-1 -1 0;-1 -1 0 0; -1 -1 0 2];
 G = [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
 TropicalPhasePlane(F,G,ulim,vlim)
 
-% Draw Trajectories:
+%% Draw Trajectories for small epsilon
 w0 = [-1 0; -0.5 0];
 eps = 0.1;
-EpsilonPhasePlot(F,G,w0,eps)
+SimulatedTrajectory(F,G,w0,eps)
 
 %% Autocatalator Bifurcations
 clear
@@ -99,24 +99,3 @@ for a = A
     title(a)
 end
 
-%% Autocatalator Tropical Curves
-clear
-close all
-a = 0.25;
-ulim = 2*[-1 1];
-vlim = ulim;
-F = [1 a-1 -1 0; -1 -1 0 0; -1 -1 0 2];
-G = [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
-TropicalCurvesAll(F,G,ulim,vlim)
-
-%% Autocatalator Tropical Curves - Bifurcations
-clear
-close all
-A = [-0.25 0 0.25 0.5 0.75 1]';
-f = figure("Visible","on","Units","normalized","OuterPosition",[0.1 0.1 .8 .8]);
-tiledlayout(2,ceil(length(A)/2),'TileSpacing','tight','Padding','tight');
-ulim = 2*[-1 1];
-vlim = ulim;
-F = @(a) [1 a-1 -1 0; -1 -1 0 0; -1 -1 0 2];
-G = @(a) [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
-TropicalCurvesBifurcations(3,A,'\alpha',F,G,ulim,vlim)

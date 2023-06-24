@@ -24,14 +24,16 @@ nD = [-nD(2);nD(1)];
 nS = [-nS(2);nS(1)];
 nD = 0.5*uMp.*nD;
 nS = 0.5*uMp.*nS;
-dD1 = 1/3*dD;
-dS1 = 1/3*dS;
-dD2 = 2/3*dD;
-dS2 = 2/3*dS;
+% dD1 = 1/3*dD;
+% dS1 = 1/3*dS;
+% dD2 = 2/3*dD;
+% dS2 = 2/3*dS;
+dD1 = 0;
+dD2 = 0.8*dD;
 p2 = p(1:2);
 
 nt = 0.2*nD;
-dt = dD;
+dt = 0.7*dD;
 qD = zeros(2,7);
 qD(:,1) = p2-dD1+nD;
 qD(:,2) = p2+dD2;
@@ -58,7 +60,6 @@ qs(:,3) = max(qD,[],2)+1.2*norm(nD);
 qs(:,2) = [qs(1,1); qs(2,3)];
 qs(:,4) = [qs(1,3); qs(2,1)];
 
-
 qS = zeros(2,3);
 s = 0.8;
 if dS(2) == 0
@@ -83,13 +84,14 @@ else
     end
 end
 
-hs = patch(qs(1,:),qs(2,:), p(3)*ones(1,4)+1e-3,'k','FaceColor','white','LineWidth',0.5);
-uistack(hs,"top")
-if any(dS)
-    hS = patch(qS(1,:),qS(2,:), p(3)*ones(1,size(qS,2))+2e-3,'k','FaceColor','k','LineWidth',0.5);
-    uistack(hS,"top")
-end
-h = patch(qD(1,:),qD(2,:), p(3)*ones(1,size(qD,2))+3e-3,'k','FaceColor',cD,'LineWidth',0.5);
+% hs = patch(qs(1,:),qs(2,:), p(3)*ones(1,4)+1e-3,'k','FaceColor','white','LineWidth',0.5);
+% uistack(hs,"top")
+% if any(dS)
+%     hS = patch(qS(1,:),qS(2,:), p(3)*ones(1,size(qS,2))+2e-3,'k','FaceColor','k','LineWidth',0.5);
+%     uistack(hS,"top")
+% end
+plot3(p(1),p(2),p(3), 's','MarkerFaceColor','w','MarkerSize',20,'LineWidth',1,'Color',0.2*[1 1 1])
+h = patch(qD(1,:),qD(2,:), p(3)*ones(1,size(qD,2))+3e-3,'k','FaceColor',cD,'LineWidth',1);
 uistack(h,"top")
 if nargout
     varargout{1} = h;

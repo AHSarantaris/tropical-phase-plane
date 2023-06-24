@@ -1,4 +1,4 @@
-function [h,w1] = EpsilonPhasePlot(F,G,w0,epsilon,tspan,maxseconds,color)
+function [h,w1] = SimulatedTrajectory(F,G,w0,epsilon,tspan,maxseconds,color)
 
 % Initialize variables
 lineWidth = 2;
