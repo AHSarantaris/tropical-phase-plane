@@ -1,18 +1,17 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="3645018708" file="C:\Users\PC\OneDrive - Danmarks Tekniske Universitet\Tropisk Dynamik\Code\TropicalPhasePlane\ToolboxPackagingConfiguration.prj" location="C:\Users\PC\OneDrive - Danmarks Tekniske Universitet\Tropisk Dynamik\Code\TropicalPhasePlane" name="ToolboxPackagingConfiguration" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="3227884319" file="C:\Users\PC\OneDrive - Danmarks Tekniske Universitet\Tropisk Dynamik\Code\TropicalPhasePlane\ToolboxPackagingConfiguration.prj" location="C:\Users\PC\OneDrive - Danmarks Tekniske Universitet\Tropisk Dynamik\Code\TropicalPhasePlane" name="ToolboxPackagingConfiguration" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>Tropical Dynamics Toolbox</param.appname>
     <param.authnamewatermark>Andreas Hussain Sarantaris</param.authnamewatermark>
     <param.email>andreas@sarantaris.dk</param.email>
     <param.company />
     <param.summary>Toolbox for analyzing tropical dynamical systems.</param.summary>
-    <param.description># Tropical Dynamics Toolbox
-This toolbox can be used to analyze a tropical dynamical system by drawing its phase portrait and its labelled subdivision. The toolbox is used in *Kristiansen and Sarantaris (2023, Preprint)*.
+    <param.description>This toolbox can be used to analyze a tropical dynamical system by drawing its phase portrait and its labelled subdivision. It is used in Kristiansen and Sarantaris (2023, Preprint).
 
 Link to preprint article: https://arxiv.org/abs/2305.18002
 
 Link to github repository: https://github.com/AHSarantaris/tropical-phase-plane</param.description>
     <param.screenshot>${PROJECT_ROOT}\toolbox_image.png</param.screenshot>
-    <param.version>2.0</param.version>
+    <param.version>2.0.0</param.version>
     <param.output>${PROJECT_ROOT}\Tropical Dynamics Toolbox.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -44,8 +43,8 @@ _SimulinkProject/*
 resources/.Project/*
 resources/_Project/*
 **/*.prj
-**/.git
-.git*
+**/.git*
+demo/lower_bound_script.mlx
 phase_plane/TropicalPhasePlane.asv
 tests
 toolbox_image.png
@@ -62,7 +61,7 @@ Tropical Dynamics Toolbox.mltbx</param.exclude.filters>
     <param.exported.on.package>false</param.exported.on.package>
     <param.required.addons />
     <param.matlab.project.id>49cd7d8b-1bae-432f-9a9f-2471ba978df7</param.matlab.project.id>
-    <param.matlab.project.name>TropicalPhasePlane</param.matlab.project.name>
+    <param.matlab.project.name>Tropical Dynamics Toolbox</param.matlab.project.name>
     <param.release.start />
     <param.release.end />
     <param.release.current.only>false</param.release.current.only>

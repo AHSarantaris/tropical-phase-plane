@@ -1,12 +1,16 @@
+%% Lower bound on number of tropical limit cycles
+% Script to draw the phase portrait of a tropical dynamical system of arbitrary 
+% degree $n$ with $\frac{1}{2}\,(n-2)\,(n-3)$ limit cycles.
 %% Parameters
+
 clear
 close all
 N = 5; % Degree of the system. N >= 4
 l1 = 2; % Length of manifold with slope 1
 l2 = 4; % Length of manifold with slope 1/2
 l3 = 6; % Length of manifold with slope 0
-
 %% Determine Tropical Polynomials
+
 M = [1 0; 1 1; 0 2];
 m = 3;
 nM = 3;
@@ -91,12 +95,10 @@ dv = l1/2;
 F = G;
 F(:,2) = G(:,2) - du*G(:,3) - dv*G(:,4) - max(- du*G(:,3) - dv*G(:,4)) - 1;
 F(:,1) = -F(:,1);
-
 %% Draw Tropical Phase Portrait
-ulim = [-2*l1 2*l1+max(U,[],'all')];
-vlim = [-l1 l1+max(V,[],'all')];
 
 close all
 figure
-% figure('Visible','on','Units','normalized','OuterPosition',[0 0.1 0.7 0.7])
+ulim = [-2*l1 2*l1+max(U,[],'all')];
+vlim = [-l1 l1+max(V,[],'all')];
 h = TropicalPhasePlane(F,G,ulim,vlim);
