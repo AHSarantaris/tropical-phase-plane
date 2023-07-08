@@ -4,14 +4,14 @@
     <param.authnamewatermark>Andreas Hussain Sarantaris</param.authnamewatermark>
     <param.email>andreas@sarantaris.dk</param.email>
     <param.company />
-    <param.summary>Toolbox for analyzing tropical dynamical systems.</param.summary>
-    <param.description>This toolbox can be used to analyze a tropical dynamical system by drawing its phase portrait and its labelled subdivision. It is used in Kristiansen and Sarantaris (2023, Preprint).
+    <param.summary>A toolbox for analyzing tropical dynamical systems.</param.summary>
+    <param.description>A toolbox for analyzing tropical dynamical systems. Features including drawing tropical phase portraits and labelled subdivisions. The toolbox is used in Kristiansen and Sarantaris (2023, Preprint) and developed by the second author.
 
 Link to preprint article: https://arxiv.org/abs/2305.18002
 
 Link to github repository: https://github.com/AHSarantaris/tropical-phase-plane</param.description>
     <param.screenshot>${PROJECT_ROOT}\toolbox_image.png</param.screenshot>
-    <param.version>2.0.0</param.version>
+    <param.version>2.1.0</param.version>
     <param.output>${PROJECT_ROOT}\Tropical Dynamics Toolbox.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -46,6 +46,9 @@ resources/_Project/*
 **/.git*
 demo/lower_bound_script.mlx
 phase_plane/TropicalPhasePlane.asv
+subdivision/CrossingGraph.asv
+subdivision/CrossingGraph.m
+subdivision/subdivisionGraphData.m
 tests
 toolbox_image.png
 Tropical Dynamics Toolbox.mltbx</param.exclude.filters>

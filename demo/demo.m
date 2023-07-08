@@ -1,5 +1,6 @@
 %% Tropical Dynamics Toolbox - Demo
-%%% Autocatalator Phase Plane
+%% Tropical Phase Portrait
+
 clc
 clear
 close all
@@ -15,8 +16,8 @@ TropicalPhasePlane(F,G)
 % Phase plane with labels
 nexttile
 TropicalPhasePlane(F,G,[],[],true)
+%% Simulated Trajectory
 
-%% Autocatalator Simulated Trajectory
 clc
 clear
 close all
@@ -35,8 +36,8 @@ TropicalPhasePlane(F,G,ulim,vlim)
 hold on
 [T,W] = ode15s(@tropicalODE,tspan,w0,[],F,G,eps);
 plot(W(:,1),W(:,2),'Color',[0 0.5 0],'LineWidth',1.5)
+%% Tropical Phase Portrait - Bifurcations
 
-%% Autocatalator Phase Plane - Bifurcations
 clc
 clear
 close all
@@ -52,8 +53,8 @@ for a = A
     TropicalPhasePlane(F,G,ulim,vlim)
     title("$\alpha = " + a + "$",'Interpreter',"latex")
 end
+%% Tropical Phase Plane - All Quadrants
 
-%% Autocatalator Phase Plane - All Quadrants
 clc
 clear
 close all
@@ -62,8 +63,8 @@ a = 0.25;
 F = [1 a-1 -1 0;-1 -1 0 0; -1 -1 0 2];
 G = [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
 TropicalPhasePlaneAllQuadrants(F,G)
+%% Labelled Subdivision & Crossing Graph
 
-%% Labelled Subdivision
 clc
 clear
 close all
@@ -71,38 +72,44 @@ a = 0;
 F = [1 a-1 -1 0; -1 -1 0 0; -1 -1 0 2];
 G = [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
 figure
+tiledlayout(1,2,'TileSpacing','compact')
+nexttile
 LabelledSubdivision(F,G)
-
+nexttile
+CrossingGraph(F,G)
 %% Lifted Point Configuration
+
 clc
 clear
 close all
 a = 0;
 F = [1 a-1 -1 0; -1 -1 0 0; -1 -1 0 2];
 G = [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
+color = [0.6 0.8 1];
 figure("Visible","on","Units","normalized","OuterPosition",[.1 .2 .6 .6]);
 tiledlayout(1,2,"Padding","compact")
 nexttile
-LabelledSubdivision(F,G,'FaceColor',[0.5 0.7 1])
+LabelledSubdivision(F,G,'FaceColor',color)
 nexttile
-LiftedPointConfiguration(getPointsAndLabels(F,G),[],'FaceColor',[0.5 0.7 1])
+LiftedPointConfiguration(getPointsAndLabels(F,G),[],'FaceColor',color)
+%% Crossing Graph - Bifurcations
 
-%% Labelled Subdivision - Bifurcations
 clc
 clear
 close all
 A = [0 0.5 0.75 1 1.25];
+color = [0.6 0.8 1];
 figure("Visible","on","Units","normalized","OuterPosition",[0 0.2 1 .6]);
 tiledlayout(1,5,'TileSpacing','tight','Padding','tight');
 for a = A
     F = [1 a-1 -1 0; -1 -1 0 0; -1 -1 0 2];
     G = [-1 0 0 0; 1 0 1 -1; 1 0 1 1];
     nexttile
-    LabelledSubdivision(F,G)
+    CrossingGraph(F,G)
     title(a)
 end
-
 %% Lifted Point Configuration - Bifurcations
+
 clc
 clear
 close all
@@ -116,12 +123,13 @@ for a = A
     LiftedPointConfiguration(getPointsAndLabels(F,G))
     title(a)
 end
-
 %% Lifted Point Configuration - Minkowski Sum
+
 clc
 clear
 close all
 A = [-0.5 0 0.5];
+color = [0.6 0.8 1];
 figure("Visible","on","Units","normalized","OuterPosition",[0.1 0.1 .6 .8]);
 tiledlayout(2,3,'TileSpacing','compact','Padding','compact');
 tile = 1;
@@ -142,5 +150,3 @@ for a = A
     TropicalCurve(TropicalDynamicalSystem(G,[]),ulim,ulim,'Color','blue','LineWidth',1.5)
     tile = tile+1;
 end
-
-

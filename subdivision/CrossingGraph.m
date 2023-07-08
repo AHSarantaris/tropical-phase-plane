@@ -1,10 +1,13 @@
-function LabelledSubdivision(F,G,varargin)
+function CrossingGraph(F,G,color,varargin)
+
+if ~exist('color','var') || isempty(color)
+    color = [0.5 0 0.5];
+end
 
 [P,D] = getPointsAndLabels(F,G);
 
 tol = 1e-6;
 nP = size(P,1);
-lineWidth = 1.2;
 
 %%% Initialize axes
 ax = gca;
@@ -34,13 +37,27 @@ else
 end
 
 %%% Plot edges
-if isplanar
-    plot(P(k,1),P(k,2),'.-k','LineWidth',lineWidth)
-else
-    for i = 1:size(E2,1)
-        pE = P(E2(i,:),:);
-        plot(pE(:,1),pE(:,2),'-k','LineWidth',lineWidth)
+for i = 1:size(E2,1)
+    e = E2(i,:);
+    p1 = P(e(1),1:2);
+    p2 = P(e(2),1:2);
+    n = p2-p1;
+    d1 = D(e(1),:);
+    d2 = D(e(2),:);
+    iscrossing = dot(n,d1)*dot(n,d2) > 0;
+    if iscrossing
+        lineColor = color;
+        lineWidth = 1.5;
+    else
+        lineColor = 'k';
+        lineWidth = 1.2;
     end
+    plot(P(e,1),P(e,2),'Color',lineColor,'LineWidth',lineWidth)
+    if iscrossing
+        r = dot(n,d1)*n;
+        LineArrow(p1'+1/2*n',r',3*nlim,3*mlim,color,lineWidth,false,false)
+    end
+
 end
 
 %%% Plot flow vectors

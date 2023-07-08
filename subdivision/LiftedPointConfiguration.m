@@ -21,35 +21,11 @@ ax = gca;
 hold(ax,'on')
 
 %%% Triangulation of convex hull
-warning('off')
-isplanar = false;
-try
-    k = convhull(P,"Simplify",false);
-    T = triangulation(k,P(:,1),P(:,2),P(:,3));
-    N = faceNormal(T);
-    k = k(N(:,3)>0,:);
-    T = triangulation(k,P(:,1),P(:,2),P(:,3));
-    N = faceNormal(T);
-    %%% Find edges
-    E1 = edges(T);
-    E2 = zeros(0,2);
-    nE = 0;
-    for i = 1:size(E1,1)
-        iT = edgeAttachments(T,E1(i,1),E1(i,2));
-        iT = iT{:};
-        if length(iT) < 2 || norm(N(iT(1),:) - N(iT(2),:)) > tol
-            nE = nE+1;
-            E2(nE,:) = E1(i,:);
-        end
-    end
-catch
-    k = convhull(P(:,1:2),"Simplify",false);
-    isplanar = true;
-end
-warning('on')
-
-ku = unique(k(:));
-notk = setdiff(1:nP,ku);
+subdivision = subdivisionGraphData(P);
+k = subdivision.faces;
+ku = subdivision.vertices;
+E2 = subdivision.edges;
+isplanar = subdivision.isplanar;
 
 
 %%% Plot lifted faces
@@ -99,9 +75,8 @@ end
 for i = 1:nP
     squareColor = 'black';
     if ~isplanar
-        attachments = vertexAttachments(T,i);
-        attachments = attachments{:};
-        if isempty(attachments)
+        notInUpperEnvelope = isempty(find(i==ku,1));
+        if notInUpperEnvelope
             squareColor = 'white';
         end
     end
