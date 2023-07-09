@@ -4,4 +4,4 @@ This toolbox provides functions for analyzing tropical dynamical systems. Featur
 
 Link to preprint article: https://arxiv.org/abs/2305.18002
 
-Link to Matlab File Exchange: https://se.mathworks.com/matlabcentral/fileexchange/132058-tropical-dynamics-toolbox
+Link to Matlab File Exchange: https://mathworks.com/matlabcentral/fileexchange/132058-tropical-dynamics-toolbox
